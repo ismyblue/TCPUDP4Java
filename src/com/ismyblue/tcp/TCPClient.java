@@ -1,4 +1,4 @@
-package com.ismyblue.tcp;
+package com.atguigu.ismyblue;
 
 import java.io.*;
 import java.net.Socket;
@@ -47,7 +47,7 @@ public class TCPClient extends Thread {
                             System.out.println("<Server>: " + serverMessage);
                         }
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        System.out.println(e.getMessage());
                     }
                 }
             }.start();
@@ -56,10 +56,21 @@ public class TCPClient extends Thread {
             Scanner scanner = new Scanner(System.in);
             while ((clientMessage = scanner.nextLine()) != null) {
                 ps.println(clientMessage);
+                if (clientMessage.equals("exit")) {
+                    br.close();
+                    ps.close();
+                    socket.close();
+                    break;
+                }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-
+        }finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }

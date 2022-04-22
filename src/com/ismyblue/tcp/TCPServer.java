@@ -1,4 +1,4 @@
-package com.ismyblue.tcp;
+package com.atguigu.ismyblue;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -20,7 +20,7 @@ public class TCPServer extends Thread {
     }
 
     private ServerSocket serverSocket;
-    private ArrayList<TCPClientConnect> clientConnects = new ArrayList<>();
+    private ArrayList<TCPServerClientConnect> clientConnects = new ArrayList<>();
 
     public TCPServer(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -47,9 +47,9 @@ public class TCPServer extends Thread {
                     String serverMessage;
                     // 给每个客户端连接发送消息
                     while ((serverMessage = scanner.nextLine()) != null) {
-                        Iterator<TCPClientConnect> iter = clientConnects.iterator();
+                        Iterator<TCPServerClientConnect> iter = clientConnects.iterator();
                         while (iter.hasNext()) {
-                            TCPClientConnect conn = iter.next();
+                            TCPServerClientConnect conn = iter.next();
                             if (!conn.isAlive()) {
                                 iter.remove();
                                 continue;
@@ -66,7 +66,7 @@ public class TCPServer extends Thread {
                 Socket tcpclient = serverSocket.accept();
 
                 // 创建接受客户端消息的线程
-                TCPClientConnect tcpClientConnect = new TCPClientConnect(tcpclient);
+                TCPServerClientConnect tcpClientConnect = new TCPServerClientConnect(tcpclient);
                 tcpClientConnect.start();
                 clientConnects.add(tcpClientConnect);
             }
